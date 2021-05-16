@@ -7,7 +7,7 @@ import Spinner from './UI/Spinner/Spinner'
 
 const App = props => {
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [books, setBooks] = useState([]);
   const [errorMessage, setErrorMessage] = useState(null);
 
