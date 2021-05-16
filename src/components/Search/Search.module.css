@@ -1,0 +1,41 @@
+*{
+    margin: 0;
+    padding: 0;
+    outline: 0;
+  }
+  
+  .Search {
+    margin-top: 15px;
+    left: 10%;
+    position: relative;
+    width: 80%;
+    display: flex;
+  }
+  
+  .Search input{
+    height: 50px;
+    width: 100%;
+    outline: none;
+    background-color: transparent;
+    font-size: 1.3rem;
+    border: none;
+    border-bottom: 2px solid #6aadc7;
+    color: #657e88;
+  }
+  
+  .Search button{
+    background-color: transparent;
+    border: 2px solid #6aadc7;
+    transition: .4s;
+    width: 70px;
+  }
+  
+  .Search input::placeholder{
+    color: #b2b2b2;
+  }
+  
+  .Search button:hover{
+    background-color: #6aadc7;
+    color: #212121;
+    cursor: pointer;
+  }
