@@ -1,0 +1,48 @@
+
+export const setLoading = () => {
+    return {
+        type:"LOADING"
+    }
+}
+
+export const clickSnippet = (id) => {
+    return{
+        type:"SNIPPET_OPEN",
+        bookId:id,
+    }
+}
+
+export const closeSnippet = () => {
+    return{
+        type:"SNIPPET_CLOSE"
+    }
+}
+
+export const fetchingBooksFailed = (error) => {
+    return {
+        type: "SEARCHING_BOOKS_FAILED",
+        error: error,
+    }
+}
+
+export const fetchingBooksSuccess = (books) => {
+    return {
+        type: "SEARCHING_BOOKS_SUCCESS",
+        books: books,
+    }
+}
+
+export const fetchingBooks = (searchValue) => {
+    return dispatch => {
+    dispatch(setLoading());
+    fetch(`http://openlibrary.org/search.json?title=${searchValue}`)
+      .then(response => response.json())
+      .then(jsonResponse => {
+        if (jsonResponse) {
+            dispatch(fetchingBooksSuccess(jsonResponse.docs));
+        } else {
+            dispatch(fetchingBooksFailed(jsonResponse.Error));
+        }
+      });
+    }
+}

@@ -1,71 +1,53 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { connect } from 'react-redux';
 import classes from './App.module.css';
 import Search from './components/Search/Search';
 import Book from './components/Books/Book/Book';
 import Spinner from './UI/Spinner/Spinner';
 import Modal from './UI/Modal/Modal';
 import SnippetExtended from './components/SnippetExtended/SnippetExtended';
-
+import * as actions from './store/actions/actions'
 
 const App = props => {
 
-  const [loading, setLoading] = useState(false);
-  const [books, setBooks] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [show, showModal] = useState(false);
-  const [snippetBook, setsnippetBook] = useState({})
-
-  const clickSnippetHandler = (book) => {
-    showModal(true);
-    const target = book.target.localName === "p" || book.target.localName === "img" ? book.target.parentElement : book.target
-    setsnippetBook(books[target.id]);
-    console.log(book)
-  }
-
-  const exitExtendedSnippet = () => {
-    showModal(false)
-  }
-
-  const search = searchValue => {
-    setLoading(true);
-    setErrorMessage(null);
-
-
-    fetch(`http://openlibrary.org/search.json?title=${searchValue}`)
-      .then(response => response.json())
-      .then(jsonResponse => {
-        if (jsonResponse.numFound > 0) {
-          setBooks(jsonResponse.docs);
-          setLoading(false);
-          console.log(jsonResponse.docs)
-        } else {
-          setErrorMessage(jsonResponse.Error);
-          setLoading(false);
-        }
-      });
-  };
-
-  return (
-    <div className={classes.App}>
-      {books ? <Modal show={show} modalClosed={exitExtendedSnippet}>
-                <SnippetExtended book={snippetBook} />
-      </Modal>: null}
-      <Search search={search} />
-      <div className={classes.Main}>
-        {loading && !errorMessage ? (
-          <Spinner />
-        ) : errorMessage ? (
-          <div className="errorMessage">{errorMessage}</div>
-        ) : (
-          books.map((book, index) => (
-            <div>
-              <Book snippetClicked={clickSnippetHandler} key={index} id={index} book={book} />
-            </div>
-          ))
-        )}
-      </div>
+return (
+  <div className={classes.App}>
+    {props.books ? <Modal show={props.show} modalClosed={props.exitExtendedSnippet}>
+      <SnippetExtended book={props.snippetBook} />
+    </Modal> : null}
+    <Search search={props.search} />
+    <div className={classes.Main}>
+      {props.loading && !props.error ? (
+        <Spinner />
+      ) : props.error ? (
+        <div className="errorMessage">{props.error}</div>
+      ) : (
+        props.books.map((book, index) => (
+          <div>
+            <Book snippetClicked={props.clickSnippetHandler.bind(this,index)} key={index} id={index} book={book} />
+          </div>
+        ))
+      )}
     </div>
-  );
+  </div>
+);
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    books: state.books,
+    error: state.error,
+    show: state.show,
+    snippetBook: state.snippetBook,
+    loading: state.loading,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    exitExtendedSnippet: () => dispatch(actions.closeSnippet()),
+    clickSnippetHandler: (id) => dispatch(actions.clickSnippet(id)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -8,7 +8,7 @@ const SnippetExtended = ({book}) => {
 
     return(
         <div className={classes.Snippet}>
-            <img src={bookCoverSrc} />
+            <img src={bookCoverSrc} alt=''/>
             <p><strong>Book Title:</strong> {book.title}</p>
             <p><strong>Authors:</strong> {book.author_name ? book.author_name.join(',') : null}</p>
             <p><strong>Publish Date:</strong>{book.publish_date ? book.publish_date[1] : null}</p>
