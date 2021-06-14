@@ -1,7 +1,9 @@
+/* eslint-disable arrow-body-style */
 
-export const setLoading = () => {
+export const setLoading = (loadingStatus) => {
     return {
-        type:"LOADING"
+        type:"LOADING",
+        loading: loadingStatus,
     }
 }
 
@@ -21,28 +23,29 @@ export const closeSnippet = () => {
 export const fetchingBooksFailed = (error) => {
     return {
         type: "SEARCHING_BOOKS_FAILED",
-        error: error,
+        error,
     }
 }
 
 export const fetchingBooksSuccess = (books) => {
     return {
         type: "SEARCHING_BOOKS_SUCCESS",
-        books: books,
+        books,
     }
 }
 
 export const fetchingBooks = (searchValue) => {
     return dispatch => {
-    dispatch(setLoading());
+    dispatch(setLoading(true));
     fetch(`http://openlibrary.org/search.json?title=${searchValue}`)
       .then(response => response.json())
       .then(jsonResponse => {
-        if (jsonResponse) {
-            dispatch(fetchingBooksSuccess(jsonResponse.docs));
-        } else {
-            dispatch(fetchingBooksFailed(jsonResponse.Error));
-        }
-      });
+        dispatch(setLoading(false));
+        dispatch(fetchingBooksSuccess(jsonResponse.docs));
+      })
+      .catch(jsonResponse => {
+        dispatch(setLoading(false));
+        dispatch(fetchingBooksFailed(jsonResponse.Error));
+      })
     }
 }

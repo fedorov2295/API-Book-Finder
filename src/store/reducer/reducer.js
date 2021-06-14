@@ -25,18 +25,16 @@ const reducer = (state=initialState, action) => {
             return {
                 ...state,
                 error:action.error,
-                loading: false,
             }
         case("SEARCHING_BOOKS_SUCCESS"):
             return {
                 ...state,
                 books: action.books,
-                loading: false,
             }
         case("LOADING"):
             return {
                 ...state,
-                loading: true,
+                loading: action.loading,
             }
         default: 
             return state;

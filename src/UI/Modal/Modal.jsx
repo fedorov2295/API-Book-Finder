@@ -1,9 +1,9 @@
+/* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import Backdrop from '../Backdrop/Backdrop';
 import classes from './Modal.module.css'
 
-const Modal = (props) => {
-    return (
+const Modal = (props) => (
         <div>
             <Backdrop show={props.show} clickedBackdrop={props.modalClosed} />
             <div
@@ -16,6 +16,5 @@ const Modal = (props) => {
             </div>
         </div>
     )
-}
 
 export default Modal;
